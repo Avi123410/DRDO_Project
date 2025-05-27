@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSPL DRDO Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .modal-content h2 {
+      text-align: center;
+    }
+
+    .modal-content form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-content label {
+      margin-top: 10px;
+    }
+
+    .modal-content input {
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .login-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .login-options button {
+      padding: 10px;
+      border: none;
+      background-color: #1976d2;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-options button:hover {
+      background-color: #145ca1;
+    }
+
+    .signup-link {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .signup-link a {
+      color: #1976d2;
+      text-decoration: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin: auto;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      position: relative;
+      
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 80%;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .hero-content button {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .hero-content button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Optional about section for scroll */
+    #about {
+      padding: 60px 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+
+    #about h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    #about p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* What's New Section */
+#whats-new-section {
+  background: #fff;
+  padding: 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+#whats-new-section h2 {
+  border-bottom: 3px solid #9bb7d4;
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.news-item {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+}
+
+.news-item-date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.news-item-title {
+  font-size: 1rem;
+  color: #333;
+  margin-top: 4px;
+}
+
+.news-badge {
+  background: yellow;
+  color: red;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  margin-left: 10px;
+}
+
+#whats-new-section a {
+  display: block;
+  margin-top: 1rem;
+  color: #0056b3;
+  text-decoration: none;
+  font-weight: bold;
+}
+  .workflow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .oval {
+    min-width: 100px;
+    padding: 15px 25px;
+    background-color: #4f46e5;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 999px; /* Makes it oval */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: transform 0.3s;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .oval:hover {
+    transform: scale(1.05);
+  }
+
+  .arrow {
+    font-size: 24px;
+    color: #6b7280;
+  }
+
+  .step p {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .workflow {
+      flex-direction: column;
+    }
+
+    .arrow {
+      transform: rotate(90deg);
+    }
+  }
+
+  .learn-more-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .learn-more-btn:hover {
+    background-color: #218838;
+  }
+  .workflow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.step {
+  cursor: pointer;
+  text-align: center;
+}
+
+.oval {
+  width: 140px;
+  height: 70px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 5px;
+  transition: background 0.3s;
+}
+
+.oval:hover {
+  background-color: #059669;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #6b7280;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  text-align: left;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #111827;
+}
+
+.modal-content p {
+  color: #4b5563;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+
+  </style>
+</head>
+
+<body>
+
+<div id="navbar-container"></div>
+
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <form>
+        <label for="userid">User ID</label>
+        <input type="text" id="userid" name="userid" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <div class="login-options">
+          <button type="submit">Login as Admin</button>
+          <button type="submit">Login as Institute</button>
+
+        </div>
+
+        <p class="signup-link">Not a user? <a href="#">Sign up</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to SSPL DRDO</h1>
+      <p>Empowering students with opportunities for growth and development.</p>
+      <button onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })">Learn More</button>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Our Portal</h2>
+    <p>This portal is designed to provide a seamless experience for students and administrators alike.</p>
+    <button class="learn-more-btn">More</button>
+  </section>
+
+  <!-- What's New Section -->
+<section id="whats-new-section" style="background:#fff; padding:20px; max-width:800px; margin:40px auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); font-family:Arial, sans-serif;">
+  <h2 style="border-bottom:3px solid #9bb7d4; display:inline-block; font-size:1.5rem; margin-bottom:1rem;">What's New</h2>
+  
+  <div id="newsList"></div>
+
+  <a href="#" style="display:block; margin-top:1rem; color:#0056b3; text-decoration:none; font-weight:bold;" id="viewAllLink">View All What's New</a>
+
+
+  <script>
+    (function() {
+      const newsData = [
+        {
+          date: '09/05/2025',
+          title: 'Advertisement for the Post of Director, DIA-CoE, IIT Delhi',
+          isNew: true
+        },
+        {
+          date: '09/05/2025',
+          title: 'Announcement for the Post of Director, DIA RCoE, IIT Madras - Advt.85/2025',
+          isNew: true
+        },
+        {
+          date: '08/05/2025',
+          title: 'Engagement of retired Government Officials as ‘Consultant’ on Contract Basis in DRDO inviting applications thereof : Regarding',
+          isNew: true
+        },
+        {
+          date: '05/05/2025',
+          title: 'Advertisement for engaging Technician',
+          isNew: false
+        }
+      ];
+
+      const newsList = document.getElementById('newsList');
+
+      newsData.forEach(item => {
+        const wrapper = document.createElement('div');
+        wrapper.style.borderBottom = '1px solid #ddd';
+        wrapper.style.padding = '12px 0';
+
+        wrapper.innerHTML = `
+          <div style="font-size:0.9rem; color:#666;">${item.date}</div>
+          <div style="font-size:1rem; color:#333; margin-top:4px;">
+            ${item.title}
+            ${item.isNew ? '<span style="background:yellow; color:red; font-weight:bold; font-size:0.7rem; padding:2px 6px; margin-left:10px;">NEW</span>' : ''}
+          </div>
+        `;
+
+        newsList.appendChild(wrapper);
+      });
+
+      // Add event listener to change link color on click
+      document.getElementById('viewAllLink').addEventListener('click', function(event) {
+        event.preventDefault();  // Prevent the default link behavior
+        this.style.color = 'blue'; // Change color to blue on click
+      });
+    })();
+
+
+      function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+  </script>
+</section>
+
+<section style="text-align: center; padding: 40px 20px; background-color: #f3f4f6;">
+  <h2 style="font-size: 2rem; color: #1f2937; margin-bottom: 10px;">How CARS/CAPSI Work</h2>
+  <p style="font-size: 1rem; color: #4b5563; max-width: 600px; margin: 0 auto 30px;">
+    CARS (Contract of Acquisition Of Research Service) or CAPSI (Contract for Acquisition of Professional Services through IDST) streamline the process from data intake to final analysis, ensuring smart academic or performance tracking.
+  </p>
+
+  <div class="workflow">
+    <div class="step" onclick="openModal('modal1')">
+      <div class="oval">RSQR/PSQR Request</div>
+      <p>Step 1</p>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step" onclick="openModal('modal2')">
+      <div class="oval">Managerial Panel</div>
+      <p>Step 2</p>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step" onclick="openModal('modal3')">
+      <div class="oval">Approval From Director</div>
+      <p>Step 3</p>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="step" onclick="openModal('modal4')">
+      <div class="oval">Sanction</div>
+      <p>Step 4</p>
+    </div>
+  </div>
+</section>
+
+<!-- Popups -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal1')">&times;</span>
+    <h3>RSQR/PSQR Request</h3>
+    <p>This is the initial phase where a research or professional service request is submitted for review.</p>
+  </div>
+</div>
+
+<div id="modal2" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal2')">&times;</span>
+    <h3>Managerial Panel</h3>
+    <p>The request is evaluated and processed by the respective managerial or administrative panel.</p>
+  </div>
+</div>
+
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal3')">&times;</span>
+    <h3>Approval From Director</h3>
+    <p>The final decision and approval are granted by the Director or authorized head.</p>
+  </div>
+</div>
+
+<div id="modal4" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal4')">&times;</span>
+    <h3>Sanction</h3>
+    <p>After approval, the sanctioning of funds or resources is processed to initiate work.</p>
+  </div>
+</div>
+
+
+<div id="footer-container"></div>
+
+<script>
+
+    // Modal functionality
+    const modal = document.getElementById("loginModal");
+    const btn = document.getElementById("openLoginModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+
+        // Function to load content from HTML files (navbar.html, footer.html)
+    function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+ 
+  function openModal(id) {
+    document.getElementById(id).style.display = 'block';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // Close modals when clicking outside the modal content
+  window.onclick = function(event) {
+    document.querySelectorAll('.modal').forEach(modal => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
